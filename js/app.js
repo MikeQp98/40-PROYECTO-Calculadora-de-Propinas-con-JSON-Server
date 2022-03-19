@@ -91,10 +91,36 @@ function mostrarPlatillos(platillos) {
         categoria.classList.add('col-md-3');
         categoria.textContent = categorias[platillo.categoria];
 
+        //Estructura y condiciones del Boton
+        const inputCantidad = document.createElement('INPUT');
+        inputCantidad.type = 'number';
+        inputCantidad.min = 0;
+        inputCantidad.value = 0;
+        inputCantidad.id = `producto -${platillo.id}`;
+        inputCantidad.classList.add('form-control');
+
+
+        inputCantidad.onchange = function () {
+            const cantidad = parseInt(inputCantidad.value);
+            console.log(cantidad);
+            agregarPlatillo({...platillo, cantidad})
+        }
+        //Agregamos estilos y ubicamos el boton con estas lineas
+        const agregar = document.createElement('DIV');
+        agregar.classList.add('col-md-2')
+        agregar.appendChild(inputCantidad)
+
+
         row.appendChild(nombre);
         row.appendChild(categoria);
         row.appendChild(precio);
+        row.appendChild(agregar);
+
         contenido.appendChild(row);
     })
 
+}
+
+function agregarPlatillo(producto) {
+    console.log(producto);
 }
