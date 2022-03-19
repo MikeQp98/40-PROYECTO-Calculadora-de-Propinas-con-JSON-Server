@@ -12,6 +12,7 @@ function guardarCliente() {
     const hora = document.querySelector('#hora').value
     const camposVacios = [mesa, hora].some(campo => campo === '');
 
+   //Esta seccion valida el Formulario
     if(camposVacios) {
         
         const existeAlerta = document.querySelector('.invalid-feedback');
@@ -30,10 +31,19 @@ function guardarCliente() {
         return;
     }
 
+     //Esta seccion almacena los datos obtenidos en el objeto
     cliente = {...cliente, mesa, hora}
 
+     //Esta seccion oculta la ventana Modal
     const modalFormulario = document.querySelector('#formulario')
     const modalBootstrap = bootstrap.Modal.getInstance(modalFormulario);
     modalBootstrap.hide();
 
+    mostrarSecciones();
+
+}
+
+function mostrarSecciones(){
+    const seccionesOcultas = document.querySelectorAll('.d-none');
+    seccionesOcultas.forEach(seccion => seccion.classList.remove('d-none'));
 }
