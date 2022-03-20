@@ -96,7 +96,7 @@ function mostrarPlatillos(platillos) {
         inputCantidad.type = 'number';
         inputCantidad.min = 0;
         inputCantidad.value = 0;
-        inputCantidad.id = `producto -${platillo.id}`;
+        inputCantidad.id = `producto-${platillo.id}`;
         inputCantidad.classList.add('form-control');
 
 
@@ -121,16 +121,58 @@ function mostrarPlatillos(platillos) {
 
 }
 
-function agregarPlatillo(producto) {
-   
+function agregarPlatillo(producto) {  
+    //Extraer el pedido actual 
     let { pedido } = cliente;
 
-    if(producto.cantidad > 0) {
-        cliente.pedido = {...pedido, producto};
+    if(producto.cantidad > 0) {  
+        
+        if(pedido.some(articulo => articulo.id === producto.id)){
+            const pedidoActualizado = pedido.map( articulo => {
+                if (articulo.id === producto.id) {
+                    articulo.cantidad = producto.cantidad;
+                }
+                return articulo;
+            });
+            cliente.pedido = [...pedidoActualizado];
+        }else {
+            cliente.pedido = [...pedido, producto];
+        }
     } else {
-        console.log('No')
+        const resultado = pedido.filter(articulo => articulo.id !== producto.id);
+        cliente.pedido = [...resultado];
     }
 
-    console.log(cliente.pedido);
+    actualizarResumen()
 
+}
+
+function actualizarResumen() {
+    const contenido = document.querySelector('#resumen .contenido');
+
+    const resumen = document.createElement('DIV');
+    resumen.classList.add('col-md-6');
+
+    const mesa = document.createElement('P');
+    mesa.textContent = 'Mesa: '
+    mesa.classList.add('fw-bold');
+
+    const mesaSpan = document.createElement('SPAN');
+    mesaSpan.textContent = cliente.mesa;
+    mesaSpan.classList.add('fw-normal');
+
+    const hora = document.createElement('P');
+    hora.textContent = 'Hora: '
+    hora.classList.add('fw-bold');
+
+    const horaSpan = document.createElement('SPAN');
+    horaSpan.textContent = cliente.mesa;
+    horaSpan.classList.add('fw-normal');
+
+
+    mesa.appendChild(mesaSpan);
+    hora.appendChild(horaSpan);
+
+
+    contenido.appendChild(mesa);
 }
