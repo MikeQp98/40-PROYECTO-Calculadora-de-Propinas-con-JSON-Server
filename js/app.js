@@ -143,6 +143,8 @@ function agregarPlatillo(producto) {
         cliente.pedido = [...resultado];
     }
 
+    limpiarHTML();
+
     actualizarResumen()
 
 }
@@ -151,7 +153,7 @@ function actualizarResumen() {
     const contenido = document.querySelector('#resumen .contenido');
 
     const resumen = document.createElement('DIV');
-    resumen.classList.add('col-md-6');
+    resumen.classList.add('col-md-6', 'card' , 'py-5', 'px-3', 'shadow');
 
     const mesa = document.createElement('P');
     mesa.textContent = 'Mesa: '
@@ -166,13 +168,66 @@ function actualizarResumen() {
     hora.classList.add('fw-bold');
 
     const horaSpan = document.createElement('SPAN');
-    horaSpan.textContent = cliente.mesa;
+    horaSpan.textContent = cliente.hora;
     horaSpan.classList.add('fw-normal');
 
 
     mesa.appendChild(mesaSpan);
     hora.appendChild(horaSpan);
 
+    //Titulo de la seccion de Platillos Consumidos
+    const heading = document.createElement('H3');
+    heading.textContent = "Platillos Consumidos";
+    heading.classList.add('my-4', 'text-center');
 
-    contenido.appendChild(mesa);
+    //Iterar sobre el Array de Pedidos
+    const grupo = document.createElement('UL');
+    grupo.classList.add('list-group');
+
+    const { pedido } = cliente;
+    pedido.forEach( articulo => {
+        const {nombre, cantidad, precio, id } = articulo
+
+        const lista = document.createElement('LI');
+        lista.classList.add('list-group-item');
+
+        const nombreEl = document.createElement('H4');
+        nombreEl.classList.add('my-4');
+        nombreEl.textContent = nombre;
+
+        const cantidadEl = document.createElement('P');
+        cantidadEl.classList.add('fw-bold');
+        cantidadEl.textContent = 'Cantidad:';
+        
+
+        const cantidadValor = document.createElement('SPAN')
+        cantidadValor.classList.add('fw-normal');
+        cantidadValor.textContent = cantidad;
+
+
+        cantidadEl.appendChild(cantidadValor);
+
+        //Agregar Elementos al LI
+        lista.appendChild(nombreEl);
+        lista.appendChild(cantidadEl);
+        
+        //Agregar lista al grupo principal
+        grupo.appendChild(lista);
+    })
+
+    resumen.appendChild(mesa);
+    resumen.appendChild(hora);
+    resumen.appendChild(heading);
+    resumen.appendChild(grupo);
+
+    contenido.appendChild(resumen);
+    
+}
+
+function limpiarHTML() {
+    const contenido = document.querySelector('#resumen .contenido')
+
+    while ( contenido.firstChild ) {
+          contenido.removeChild(contenido.firstChild)
+    }
 }
